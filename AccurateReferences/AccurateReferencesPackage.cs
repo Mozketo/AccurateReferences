@@ -24,16 +24,15 @@ namespace BenClarkRobinson.AccurateReferences
     // This attribute tells the PkgDef creation utility (CreatePkgDef.exe) that this class is
     // a package.
     [PackageRegistration(UseManagedResourcesOnly = true)]
-    // This attribute is used to register the information needed to show this package
+    // This attribute is used to register the informations needed to show the this package
     // in the Help/About dialog of Visual Studio.
     [InstalledProductRegistration("#110", "#112", "1.0", IconResourceID = 400)]
     // This attribute is needed to let the shell know that this package exposes some menus.
     [ProvideMenuResource("Menus.ctmenu", 1)]
     // This attribute registers a tool window exposed by this package.
     [ProvideToolWindow(typeof(MyToolWindow))]
-    [Guid(GuidList.guidAccurateReferencesPkgString)]
-    [ProvideAutoLoad(VSConstants.UICONTEXT.SolutionExists_string)]
-    public sealed class AccurateReferencesPackage : Package
+    [Guid(GuidList.guidAccurateReferences2010PkgString)]
+    public sealed class AccurateReferences2010Package : Package
     {
         /// <summary>
         /// Default constructor of the package.
@@ -42,9 +41,9 @@ namespace BenClarkRobinson.AccurateReferences
         /// not sited yet inside Visual Studio environment. The place to do all the other 
         /// initialization is the Initialize method.
         /// </summary>
-        public AccurateReferencesPackage()
+        public AccurateReferences2010Package()
         {
-            Debug.WriteLine(string.Format(CultureInfo.CurrentCulture, "Entering constructor for: {0}", this.ToString()));
+            Trace.WriteLine(string.Format(CultureInfo.CurrentCulture, "Entering constructor for: {0}", this.ToString()));
         }
 
         /// <summary>
@@ -68,63 +67,29 @@ namespace BenClarkRobinson.AccurateReferences
 
 
         /////////////////////////////////////////////////////////////////////////////
-        // Overridden Package Implementation
+        // Overriden Package Implementation
         #region Package Members
 
         /// <summary>
         /// Initialization of the package; this method is called right after the package is sited, so this is the place
-        /// where you can put all the initialization code that rely on services provided by VisualStudio.
+        /// where you can put all the initilaization code that rely on services provided by VisualStudio.
         /// </summary>
         protected override void Initialize()
         {
-            Debug.WriteLine (string.Format(CultureInfo.CurrentCulture, "Entering Initialize() of: {0}", this.ToString()));
+            Trace.WriteLine (string.Format(CultureInfo.CurrentCulture, "Entering Initialize() of: {0}", this.ToString()));
             base.Initialize();
-
-            var core = Infrastructure.Core.Instance; // Init the core.
 
             // Add our command handlers for menu (commands must exist in the .vsct file)
             OleMenuCommandService mcs = GetService(typeof(IMenuCommandService)) as OleMenuCommandService;
             if ( null != mcs )
             {
-                // Create the command for the menu item.
-                CommandID menuCommandID = new CommandID(GuidList.guidAccurateReferencesCmdSet, (int)PkgCmdIDList.cmdidAccurateReferences);
-                MenuCommand menuItem = new MenuCommand(MenuItemCallback, menuCommandID);
-                mcs.AddCommand(menuItem);
                 // Create the command for the tool window
-                CommandID toolwndCommandID = new CommandID(GuidList.guidAccurateReferencesCmdSet, (int)PkgCmdIDList.cmdidAccurateReferencesTool);
+                CommandID toolwndCommandID = new CommandID(GuidList.guidAccurateReferences2010CmdSet, (int)PkgCmdIDList.cmdidAccurateReferences);
                 MenuCommand menuToolWin = new MenuCommand(ShowToolWindow, toolwndCommandID);
                 mcs.AddCommand( menuToolWin );
             }
         }
         #endregion
-
-        /// <summary>
-        /// This function is the callback used to execute a command when the a menu item is clicked.
-        /// See the Initialize method to see how the menu item is associated to this function using
-        /// the OleMenuCommandService service and the MenuCommand class.
-        /// </summary>
-        private void MenuItemCallback(object sender, EventArgs e)
-        {
-            // Show a Message Box to prove we were here
-            IVsUIShell uiShell = (IVsUIShell)GetService(typeof(SVsUIShell));
-
-            //this.FindToolWindow("", 
-
-            Guid clsid = Guid.Empty;
-            int result;
-            Microsoft.VisualStudio.ErrorHandler.ThrowOnFailure(uiShell.ShowMessageBox(
-                       0,
-                       ref clsid,
-                       "AccurateReferences",
-                       string.Format(CultureInfo.CurrentCulture, "Inside {0}.MenuItemCallback()", this.ToString()),
-                       string.Empty,
-                       0,
-                       OLEMSGBUTTON.OLEMSGBUTTON_OK,
-                       OLEMSGDEFBUTTON.OLEMSGDEFBUTTON_FIRST,
-                       OLEMSGICON.OLEMSGICON_INFO,
-                       0,        // false
-                       out result));
-        }
 
     }
 }

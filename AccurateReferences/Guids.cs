@@ -6,10 +6,10 @@ namespace BenClarkRobinson.AccurateReferences
 {
     static class GuidList
     {
-        public const string guidAccurateReferencesPkgString = "7484edf4-0ab6-46a6-9a77-d1029ac12ff9";
-        public const string guidAccurateReferencesCmdSetString = "af086e42-2710-4f37-b8f8-e1c37c813989";
-        public const string guidToolWindowPersistanceString = "655a8b1e-20ae-4f43-bfa2-ac76cca45d2c";
+        public const string guidAccurateReferences2010PkgString = "9dd84151-86dd-413f-b40f-e70556aca66a";
+        public const string guidAccurateReferences2010CmdSetString = "bd6bf101-deb7-4793-8376-e8b93aeeb8e8";
+        public const string guidToolWindowPersistanceString = "104b5319-a714-4b17-9c73-48511995d430";
 
-        public static readonly Guid guidAccurateReferencesCmdSet = new Guid(guidAccurateReferencesCmdSetString);
+        public static readonly Guid guidAccurateReferences2010CmdSet = new Guid(guidAccurateReferences2010CmdSetString);
     };
 }

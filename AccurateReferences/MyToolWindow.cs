@@ -19,7 +19,7 @@ namespace BenClarkRobinson.AccurateReferences
     /// This class derives from the ToolWindowPane class provided from the MPF in order to use its 
     /// implementation of the IVsUIElementPane interface.
     /// </summary>
-    [Guid("655a8b1e-20ae-4f43-bfa2-ac76cca45d2c")]
+    [Guid("104b5319-a714-4b17-9c73-48511995d430")]
     public class MyToolWindow : ToolWindowPane
     {
         /// <summary>

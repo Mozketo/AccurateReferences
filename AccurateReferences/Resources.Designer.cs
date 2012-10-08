@@ -70,7 +70,7 @@ namespace BenClarkRobinson.AccurateReferences {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Accurate References Tool.
+        ///   Looks up a localized string similar to Accurate References.
         /// </summary>
         internal static string ToolWindowTitle {
             get {

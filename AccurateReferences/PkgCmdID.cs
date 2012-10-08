@@ -6,8 +6,8 @@ namespace BenClarkRobinson.AccurateReferences
 {
     static class PkgCmdIDList
     {
-        public const uint cmdidAccurateReferences =        0x100;
-        public const uint cmdidAccurateReferencesTool =    0x101;
+
+        public const uint cmdidAccurateReferences =    0x101;
 
     };
 }
