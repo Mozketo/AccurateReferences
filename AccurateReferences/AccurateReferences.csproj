@@ -114,10 +114,15 @@
     </COMReference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Extensions\EnumerableExtensions.cs" />
+    <Compile Include="Extensions\ModelExtensions.cs" />
+    <Compile Include="Extensions\SolutionProjectExtenions.cs" />
     <Compile Include="Infrastructure\Core.cs" />
+    <Compile Include="Infrastructure\ReferenceEngine.cs" />
     <Compile Include="Infrastructure\Parser\Solution.cs" />
     <Compile Include="Infrastructure\Parser\SolutionParser.cs" />
     <Compile Include="Infrastructure\SolutionEventsListener.cs" />
+    <Compile Include="Models\ProjectItemModel.cs" />
     <Compile Include="MyControl.xaml.cs">
       <DependentUpon>MyControl.xaml</DependentUpon>
     </Compile>
@@ -155,6 +160,7 @@
   <ItemGroup>
     <VSCTCompile Include="AccurateReferences.vsct">
       <ResourceName>Menus.ctmenu</ResourceName>
+      <SubType>Designer</SubType>
     </VSCTCompile>
   </ItemGroup>
   <ItemGroup>

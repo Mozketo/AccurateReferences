@@ -3,7 +3,7 @@
   <Identifier Id="7484edf4-0ab6-46a6-9a77-d1029ac12ff9">
     <Name>Accurate References</Name>
     <Author>Ben Clark-Robinson</Author>
-    <Version>1.2</Version>
+    <Version>1.5</Version>
     <Description xml:space="preserve">List all references in the solution by Project and show the acutal Reference used. Sometimes Visual Studio will show an assembly incorrectly.</Description>
     <Locale>1033</Locale>
     <License>license.txt</License>
