@@ -18,8 +18,11 @@ namespace BenClarkRobinson.AccurateReferences.Extensions
             return node;
         }
 
-        public static TreeViewItem ToTreeViewItem(this ReferenceModel reference)
+        public static TreeViewItem ToTreeViewItem(this ReferenceModel reference, bool showConflictingOnly = false)
         {
+            if (showConflictingOnly && !reference.IsConflicting)
+                return null;
+
             var node = new TreeViewItem
             {
                 Header = String.Format("{0}: {1}", reference.ItemType, reference.ItemLocation),
@@ -32,7 +35,7 @@ namespace BenClarkRobinson.AccurateReferences.Extensions
             if (reference.SimilarRefences != null && reference.SimilarRefences.Any())
             {
                 var parents = reference.SimilarRefences.Select(r => r.Parent).Distinct().ToCsv(i => i.Name, ", ");
-                node.Header = String.Format("{0} (Different to: {1})", node.Header, parents);
+                node.Header = String.Format("{0} (Conflicting with: {1})", node.Header, parents);
             }
 
             return node;

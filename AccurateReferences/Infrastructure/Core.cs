@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.Design;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
@@ -23,6 +24,8 @@ namespace BenClarkRobinson.AccurateReferences.Infrastructure
 
         private IVsOutputWindowPane lazyOutputWindowPane;
         private List<object> _events = new List<object>();
+
+        public AccurateReferences2010Package AccurateReferencesPackage { get; set; }
 
         public SolutionEventsListener SolutionEventsListener { get; private set; }
         public EnvDTE80.DTE2 Dte { get; private set; }
@@ -51,6 +54,20 @@ namespace BenClarkRobinson.AccurateReferences.Infrastructure
             //SolutionEventsListener class from http://stackoverflow.com/questions/2525457/automating-visual-studio-with-envdte 
             // via Elisha http://stackoverflow.com/users/167149/elisha
             SolutionEventsListener = new SolutionEventsListener();
+
+            SolutionEventsListener.OnAfterCloseSolution += () =>
+            {
+                ToolWindowPane window = this.AccurateReferencesPackage.FindToolWindow(typeof(MyToolWindow), 0, true);
+                if (window != null)
+                    ((MyControl)window.Content).OnSolutionUnload();
+            };
+
+            SolutionEventsListener.OnAfterOpenSolution += () =>
+            {
+                ToolWindowPane window = this.AccurateReferencesPackage.FindToolWindow(typeof(MyToolWindow), 0, true);
+                if (window != null)
+                    ((MyControl)window.Content).OnSolutionLoad();
+            };
 
             Dte = Package.GetGlobalService(typeof(DTE)) as EnvDTE80.DTE2;
             Events = Dte.Events as Events2;

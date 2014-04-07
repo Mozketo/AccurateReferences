@@ -37,6 +37,7 @@ namespace BenClarkRobinson.AccurateReferences.Models
         public string ItemType { get; set; }
         public bool SpecificVersion { get; set; }
         public Color Color { get; set; }
+        public bool IsConflicting { get; set; }
 
         public string ItemLocation { 
             get { return _itemLocation; } 

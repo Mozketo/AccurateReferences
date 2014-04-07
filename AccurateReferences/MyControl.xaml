@@ -6,7 +6,7 @@
              Background="{DynamicResource VsBrush.Window}"
              Foreground="{DynamicResource VsBrush.WindowText}"
              mc:Ignorable="d"
-             d:DesignHeight="400" d:DesignWidth="300"
+             d:DesignHeight="400" d:DesignWidth="409"
              Name="MyToolWindow">
     <Grid>
         <Grid.RowDefinitions>
@@ -16,16 +16,17 @@
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*"></ColumnDefinition>
         </Grid.ColumnDefinitions>
-        <!--<StackPanel Orientation="Vertical">
-        </StackPanel>-->
+
         <TextBox x:Name="search" Height="23" TextWrapping="Wrap" ToolTip="Search for a reference" VerticalAlignment="Top" TabIndex="0" Margin="0,0,80,0"/>
         <Button Width="80" Height="23" VerticalAlignment="Top" HorizontalAlignment="Right" Click="search_Click">
             <TextBlock>
                 Search
             </TextBlock>
         </Button>
-        <TreeView x:Name="tree" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="0,46,0,0" TabIndex="1" MouseDoubleClick="tree_MouseDoubleClick" />
-        <CheckBox x:Name="showSystemReferences" Click="search_Click" Content="Show System references" Height="16" HorizontalAlignment="Left" Margin="0,27,0,0" VerticalAlignment="Top" />
-        <CheckBox x:Name="showMissingOnly" Click="search_Click" Content="Show missing only" Height="16" HorizontalAlignment="Left" Margin="165,27,0,0" VerticalAlignment="Top" />
+        <TreeView x:Name="tree" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="0,70,0,0" TabIndex="1" MouseDoubleClick="tree_MouseDoubleClick" />
+        <CheckBox x:Name="showSystemReferences" Click="search_Click" Content="Show System references" Height="16" HorizontalAlignment="Left" Margin="12,48,0,0" VerticalAlignment="Top" />
+        <RadioButton x:Name="showMissingOnly" Click="search_Click" Content="Show missing only" Height="16" HorizontalAlignment="Left" Margin="94,27,0,0" VerticalAlignment="Top" />
+        <RadioButton x:Name="showConflictingOnly" Click="search_Click" Content="Show conflicting only" Height="16" HorizontalAlignment="Left" Margin="228,27,0,0" VerticalAlignment="Top" />
+        <RadioButton Content="Show All" Click="search_Click" Height="16" HorizontalAlignment="Left" Margin="12,27,0,0" VerticalAlignment="Top" IsChecked="True" />
     </Grid>
 </UserControl>

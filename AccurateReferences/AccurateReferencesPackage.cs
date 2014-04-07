@@ -88,6 +88,9 @@ namespace BenClarkRobinson.AccurateReferences
                 MenuCommand menuToolWin = new MenuCommand(ShowToolWindow, toolwndCommandID);
                 mcs.AddCommand( menuToolWin );
             }
+
+            var instance = Infrastructure.Core.Instance;
+            instance.AccurateReferencesPackage = this;
         }
         #endregion
 

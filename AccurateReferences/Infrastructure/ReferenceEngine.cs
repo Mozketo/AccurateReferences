@@ -42,8 +42,6 @@ namespace BenClarkRobinson.AccurateReferences.Infrastructure
             ColoriseDupFilesWithDifferentPaths(ref projectsAndReferences);
             ColoriseMissingFiles(ref projectsAndReferences);
 
-            var red = projectsAndReferences.SelectMany(p => p.Children).Where(c => c.Color != Colors.Black).ToList();
-
             return projectsAndReferences;
         }
 
@@ -60,6 +58,9 @@ namespace BenClarkRobinson.AccurateReferences.Infrastructure
                 .ToList()
                 .ForEach(c =>
                     {
+                        if (c.IsConflicting)
+                            return;
+
                         var similar = children.Where(x => x.Filename.Equals(c.Filename, StringComparison.CurrentCultureIgnoreCase)
                             && !x.ItemLocation.Replace(@"..\", "").Equals(c.ItemLocation.Replace(@"..\", ""), StringComparison.CurrentCultureIgnoreCase)).ToList();
                         if (similar.Any())
@@ -68,7 +69,12 @@ namespace BenClarkRobinson.AccurateReferences.Infrastructure
                             Color color = _pairedColors.Skip(i).First();
                             c.SimilarRefences = similar.ToList();
                             c.Color = color;
-                            similar.ForEach(x => x.Color = color);
+                            c.IsConflicting = true;
+                            similar.ForEach(x =>
+                                                {
+                                                    x.Color = color;
+                                                    x.IsConflicting = true;
+                                                });
                         }
                     });
             }

@@ -15,11 +15,12 @@ namespace BenClarkRobinson.AccurateReferences.Infrastructure
 
         public event Action OnAfterOpenProject;
         public event Action OnQueryUnloadProject;
+        public event Action OnAfterOpenSolution;
+        public event Action OnAfterCloseSolution;
 
         public SolutionEventsListener()
         {
             InitNullEvents();
-
             solution = Package.GetGlobalService(typeof(SVsSolution)) as IVsSolution;
             if (solution != null)
             {
@@ -31,12 +32,15 @@ namespace BenClarkRobinson.AccurateReferences.Infrastructure
         {
             OnAfterOpenProject += () => { };
             OnQueryUnloadProject += () => { };
+            OnAfterOpenSolution += () => { };
+            OnAfterCloseSolution += () => { };
         }
 
         #region IVsSolutionEvents Members
 
         int IVsSolutionEvents.OnAfterCloseSolution(object pUnkReserved)
         {
+            OnAfterCloseSolution();
             return VSConstants.S_OK;
         }
 
@@ -53,6 +57,7 @@ namespace BenClarkRobinson.AccurateReferences.Infrastructure
 
         int IVsSolutionEvents.OnAfterOpenSolution(object pUnkReserved, int fNewSolution)
         {
+            OnAfterOpenSolution();
             return VSConstants.S_OK;
         }
 

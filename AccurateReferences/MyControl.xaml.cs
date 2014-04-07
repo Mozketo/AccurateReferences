@@ -24,7 +24,28 @@ namespace BenClarkRobinson.AccurateReferences
             InitializeReferences();
         }
 
-        //[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1300:SpecifyMessageBoxOptions")]
+        public void OnSolutionLoad()
+        {
+            var refTreeView = (TreeView)this.FindName("tree");
+            if (refTreeView == null)
+                return;
+
+            refTreeView.Items.Clear();
+            refTreeView.Items.Add(new TreeViewItem { Header = "Please click the refresh button to see all references" });
+        }
+
+        public void OnSolutionUnload() 
+        {
+            var refTreeView = (TreeView)this.FindName("tree");
+            if (refTreeView == null)
+                return;
+
+            refTreeView.Items.Clear();
+            refTreeView.Items.Add(new TreeViewItem { Header = "Please open a solution to see all references" });
+        }
+
+
+    //[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1300:SpecifyMessageBoxOptions")]
         private void search_Click(object sender, RoutedEventArgs e)
         {
             InitializeReferences();
@@ -34,11 +55,11 @@ namespace BenClarkRobinson.AccurateReferences
         {
             var searchTextBox = (TextBox)this.FindName("search");
             var showSystemReferences = (CheckBox)this.FindName("showSystemReferences");
-            var showMissingOnly = (CheckBox)this.FindName("showMissingOnly");
-            var solution = Infrastructure.Core.Instance.Dte.Solution;
+            var showMissingOnly = (RadioButton)this.FindName("showMissingOnly");
 
+            var solution = Infrastructure.Core.Instance.Dte.Solution;
             var engine = new ReferenceEngine(solution, searchTextBox.Text, showSystemReferences.IsChecked.Value, showMissingOnly.IsChecked.Value);
-            UpdateUi(engine.References);          
+            UpdateUi(engine.References);
         }
 
         private void UpdateUi(IEnumerable<ProjectModel> projects)
@@ -46,6 +67,16 @@ namespace BenClarkRobinson.AccurateReferences
             var refTreeView = (TreeView)this.FindName("tree");
             if (refTreeView == null)
                 return;
+
+            var searchTextBox = (TextBox)this.FindName("search");
+            if (searchTextBox == null)
+                return;
+
+            var showConflictingOnlyCtrl = ((RadioButton)this.FindName("showConflictingOnly"));
+            if (showConflictingOnlyCtrl == null)
+                return;
+
+            bool showConflictingOnly = showConflictingOnlyCtrl.IsChecked.Value;
 
             refTreeView.Items.Clear();
 
@@ -55,22 +86,25 @@ namespace BenClarkRobinson.AccurateReferences
                 return;
             }
 
-            var searchTextBox = (TextBox)this.FindName("search");
-
             foreach (ProjectModel project in projects.OrderBy(p => p.Name))
             {
                 if (!project.Children.Any())
                     continue;
 
+                // Is showing only conflicting Refs and if this project doesn't have any children. Well then don't show anything.
+                if (showConflictingOnly && !project.Children.Any(c => c.IsConflicting))
+                    continue;
+
                 var parentNode = project.ToTreeViewItem();
-                if (!String.IsNullOrEmpty(searchTextBox.Text))
+                if (!String.IsNullOrEmpty(searchTextBox.Text) || showConflictingOnly)
                     parentNode.ExpandSubtree(); // If searching for something force open the subtrees
                 refTreeView.Items.Add(parentNode);
 
                 foreach (ReferenceModel child in project.Children)
                 {
-                    var childNode = child.ToTreeViewItem();
-                    parentNode.Items.Add(childNode);
+                    var childNode = child.ToTreeViewItem(showConflictingOnly);
+                    if (childNode != null)
+                        parentNode.Items.Add(childNode);
                 }
             }
         }
@@ -89,10 +123,14 @@ namespace BenClarkRobinson.AccurateReferences
                 return;
 
             var header = item.Header.ToString();
-            header = header.Substring(header.IndexOf(" ", StringComparison.CurrentCultureIgnoreCase));
-            header = header.Substring(0, header.IndexOf(" ("));
+            if (header.IndexOf(" ", StringComparison.CurrentCultureIgnoreCase) > -1)
+            {
+                header = header.Substring(header.IndexOf(" ", StringComparison.CurrentCultureIgnoreCase));
+                if (header.IndexOf(" (", StringComparison.CurrentCultureIgnoreCase) > -1)
+                    header = header.Substring(0, header.IndexOf(" (", StringComparison.CurrentCultureIgnoreCase));
+            }
 
-            var filename = System.IO.Path.GetFileName(header);
+            var filename = Path.GetFileName(header);
             if (String.IsNullOrEmpty(filename))
                 return;
 

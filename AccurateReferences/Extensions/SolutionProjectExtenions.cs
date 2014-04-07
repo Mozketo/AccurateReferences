@@ -53,15 +53,10 @@ namespace BenClarkRobinson.AccurateReferences.Extensions
                         projectItemModel.SpecificVersion = true;
                     }
 
-                    if (showMissingOnly)
-                    {
-                        if (!File.Exists(path))
-                            items.Add(projectItemModel);
-                    }
-                    else
-                    {
+                    if (showMissingOnly && !File.Exists(path))
                         items.Add(projectItemModel);
-                    }
+                    else if (!showMissingOnly)
+                        items.Add(projectItemModel);
                 }
                 else
                 {
